@@ -187,10 +187,6 @@
 
     End Sub
 
-
-
-
-
     ' Timer Callback
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles timer1.Tick
         ToolStripStatusLabel1.Text = Format(Now, "HH:mm:ss")
@@ -202,68 +198,73 @@
 
     Private Sub Btn1_Click(sender As Object, e As EventArgs) Handles btn1.Click
         txtRes.Text = txtRes.Text + "1"
-        Allbtn()
+        EnAllbtn()
+
     End Sub
 
     Private Sub Btn2_Click(sender As Object, e As EventArgs) Handles btn2.Click
         txtRes.Text = txtRes.Text + "2"
-        Allbtn()
+        EnAllbtn()
     End Sub
 
     Private Sub Btn3_Click(sender As Object, e As EventArgs) Handles btn3.Click
         txtRes.Text = txtRes.Text + "3"
-        Allbtn()
+        EnAllbtn()
     End Sub
 
     Private Sub Btn4_Click(sender As Object, e As EventArgs) Handles btn4.Click
         txtRes.Text = txtRes.Text + "4"
-        Allbtn()
+        EnAllbtn()
     End Sub
 
     Private Sub Btn5_Click(sender As Object, e As EventArgs) Handles btn5.Click
         txtRes.Text = txtRes.Text + "5"
-        Allbtn()
+        EnAllbtn()
     End Sub
 
     Private Sub Btn6_Click(sender As Object, e As EventArgs) Handles btn6.Click
         txtRes.Text = txtRes.Text + "6"
-        Allbtn()
+        EnAllbtn()
     End Sub
 
     Private Sub btn7_Click(sender As Object, e As EventArgs) Handles btn7.Click
         txtRes.Text = txtRes.Text + "7"
-        Allbtn()
+        EnAllbtn()
     End Sub
 
     Private Sub btn8_Click(sender As Object, e As EventArgs) Handles btn8.Click
         txtRes.Text = txtRes.Text + "8"
-        Allbtn()
+        EnAllbtn()
     End Sub
 
     Private Sub btn9_Click(sender As Object, e As EventArgs) Handles btn9.Click
         txtRes.Text = txtRes.Text + "9"
-        Allbtn()
+        EnAllbtn()
     End Sub
 
     Private Sub btn0_Click(sender As Object, e As EventArgs) Handles btn0.Click
         txtRes.Text = txtRes.Text + "0"
-        Allbtn()
+        EnAllbtn()
     End Sub
 
     Private Sub btnSoma_Click(sender As Object, e As EventArgs) Handles btnSoma.Click
-        setOpt("+")
+        SetOper("+")
+
     End Sub
 
     Private Sub btnSub_Click(sender As Object, e As EventArgs) Handles btnSub.Click
-        setOpt("-")
+        SetOper("-")
+
     End Sub
 
     Private Sub btnTimes_Click(sender As Object, e As EventArgs) Handles btnTimes.Click
-        setOpt("*")
+        SetOper("*")
+
     End Sub
 
     Private Sub btnDiv_Click(sender As Object, e As EventArgs) Handles btnDiv.Click
-        setOpt("/")
+        SetOper("/")
+
     End Sub
 
     Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
@@ -272,41 +273,49 @@
         txtOper.Text = ""
         txtRes.Text = ""
 
-
         btnSoma.Enabled = False
         btnSub.Enabled = False
         btnTimes.Enabled = False
         btnDiv.Enabled = False
 
-
     End Sub
 
     Private Sub btnEq_Click(sender As Object, e As EventArgs) Handles btnEq.Click
         Dim oper1, oper2, res As Double
+        Dim aux As Integer = InStr(txtRes.Text, "+") + InStr(txtRes.Text, "-") + InStr(txtRes.Text, "*") + InStr(txtRes.Text, "/")
+
         Try
-            oper2 = CDbl(txtRes.Text)
-            oper1 = CDbl(txtOper1.Text)
+            oper1 = CDbl(Mid(txtRes.Text, 1, aux - 1))
+            oper2 = CDbl(Mid(txtRes.Text, aux + 1, txtRes.TextLength - 1))
         Catch ex As Exception
             MsgBox("Error! Try agian")
         End Try
 
-        Select Case txtOper.Text
-            Case "-"
-                res = oper1 + oper2
+
+        Console.WriteLine(Mid(txtRes.Text, aux, 1))
+        Select Case Mid(txtRes.Text, aux, 1)
             Case "+"
+                res = oper1 + oper2
+                Console.WriteLine("sUM")
+            Case "-"
                 res = oper1 - oper2
+                Console.WriteLine("Sub")
             Case "*"
                 res = oper1 * oper2
+                Console.WriteLine("Times")
             Case "/"
                 Try
                     res = oper1 / oper2
+                    Console.WriteLine("Div")
                 Catch
                     MsgBox("Cant divvide by 0!")
                 End Try
         End Select
 
         Try
-            txtOper2.Text = txtRes.Text
+            txtOper1.Text = CStr(oper1)
+            txtOper2.Text = CStr(oper2)
+            txtOper.Text = Mid(txtRes.Text, aux, 1)
             txtRes.Text = Mid(CStr(res), 1, 4)
         Catch
         End Try
@@ -319,8 +328,9 @@
 
     Private Sub setOpt(ByVal oper As String)
         txtOper.Text = oper
-        txtOper1.Text = txtRes.Text
-        txtRes.Text = ""    ' Clears while waiting for second operator
+        txtOper1.Text = Mid(txtRes.Text, 1, txtRes.TextLength - 1)
+        Console.WriteLine(Mid(txtRes.Text, 1, txtRes.TextLength - 1))
+        txtRes.Text = txtOper1.Text + txtOper.Text
     End Sub
 
 
@@ -328,21 +338,42 @@
         CheckEq()
     End Sub
 
-    Private Sub Allbtn()
+    Private Sub CheckEq()
+        'Check if there is  Operation Available in String
+        Dim aux As Short = InStr(txtRes.Text, "+") + InStr(txtRes.Text, "-") + InStr(txtRes.Text, "*") + InStr(txtRes.Text, "/")
+
+        If aux > 0 Then
+            If Mid(txtRes.Text, 1, aux - 1).Length > 0 And Mid(txtRes.Text, aux + 1, txtRes.TextLength).Length > 0 Then
+                btnEq.Enabled = True
+            Else
+                btnEq.Enabled = False
+            End If
+        Else
+            btnEq.Enabled = False
+
+        End If
+
+    End Sub
+
+    Private Sub SetOper(ByVal op As String)
+        Dim aux As Boolean = txtRes.Text(txtRes.TextLength - 1) = "+" Or txtRes.Text(txtRes.TextLength - 1) = "-" Or
+            txtRes.Text(txtRes.TextLength - 1) = "*" Or txtRes.Text(txtRes.TextLength - 1) = "/"
+
+        If aux Then
+            txtRes.Text = Mid(txtRes.Text, 1, txtRes.TextLength - 1) + op
+        Else
+            txtRes.Text = txtRes.Text + op
+        End If
+
+    End Sub
+
+    Private Sub EnAllbtn()
         btnSoma.Enabled = True
         btnSub.Enabled = True
         btnTimes.Enabled = True
         btnDiv.Enabled = True
         btnClear.Enabled = True
-    End Sub
 
-    Private Sub CheckEq()
-        If txtOper.TextLength <> 0 And txtRes.TextLength <> 0 Then
-            btnEq.Enabled = True
-        Else
-            btnEq.Enabled = False
-        End If
     End Sub
-
 
 End Class
