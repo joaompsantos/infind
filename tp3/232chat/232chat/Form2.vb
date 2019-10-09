@@ -51,7 +51,7 @@
             .Items.Clear()
             .Items.AddRange(My.Computer.Ports.SerialPortNames.ToArray)
             If .Items.Count > 0 Then
-                .Text = .Items(0)
+                .SelectedItem = .Items(0)
             End If
         End With
 
@@ -61,9 +61,11 @@
             .Height = cb_height
             .DropDownStyle = ComboBoxStyle.DropDownList
             .Items.Clear()
-            .Items.AddRange({"4800", "9600", "19200"})
-            .Text = .Items(1)
+            .Items.AddRange({"1200", "1800", "2400", "4800", "9600", "19200", "38400", "57600"})
+            .SelectedItem = .Items(0)
         End With
+
+
 
         With cbPar
             .Location = New Point(lblPort.Location.X + space + lbl_width, lblPort.Location.Y + 2 * space + 2 * cb_height)

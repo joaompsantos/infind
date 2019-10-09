@@ -185,7 +185,6 @@
 
     Private Sub timer_Tick(sender As Object, e As EventArgs) Handles timer.Tick
         rxdata = rxdata & serialport.ReadExisting()
-        Console.WriteLine("Sasdasd: \n")
 
         If rxdata.Length > 0 Then
             txtRx.Text = rxdata
