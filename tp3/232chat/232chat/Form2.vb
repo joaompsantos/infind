@@ -1,7 +1,7 @@
 ﻿Public Class Form2
     Private Sub Form2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         setUI()
-
+        portparam.setvalid(False)
     End Sub
 
     Private Sub setUI()
@@ -18,7 +18,7 @@
         Dim btn_width As Short = 50
         Dim btn_height As Short = 20
 
-
+        Me.Text = "Conf"
 
         'Labels
         With lblPort
@@ -47,22 +47,32 @@
             .Location = New Point(lblPort.Location.X + space + lbl_width, lblPort.Location.Y)
             .Width = cb_width
             .Height = cb_height
+            .DropDownStyle = ComboBoxStyle.DropDownList
+            .Items.Clear()
             .Items.AddRange(My.Computer.Ports.SerialPortNames.ToArray)
-            '.Text = .Items(0)
+            If .Items.Count > 0 Then
+                .Text = .Items(0)
+            End If
         End With
 
         With cbBaud
             .Location = New Point(lblPort.Location.X + space + lbl_width, lblPort.Location.Y + space + cb_height)
             .Width = cb_width
             .Height = cb_height
+            .DropDownStyle = ComboBoxStyle.DropDownList
+            .Items.Clear()
             .Items.AddRange({"4800", "9600", "19200"})
+            .Text = .Items(1)
         End With
 
         With cbPar
             .Location = New Point(lblPort.Location.X + space + lbl_width, lblPort.Location.Y + 2 * space + 2 * cb_height)
             .Width = cb_width
             .Height = cb_height
+            .DropDownStyle = ComboBoxStyle.DropDownList
+            .Items.Clear()
             .Items.AddRange({IO.Ports.Parity.Even, IO.Ports.Parity.Odd, IO.Ports.Parity.None})
+            .SelectedItem = .Items(2)
         End With
 
         'Buttons
@@ -87,14 +97,25 @@
 
     End Sub
 
-
-
     Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
+        portparam.setvalid(False)
         Me.Close()
     End Sub
 
     Private Sub BtnOk_Click(sender As Object, e As EventArgs) Handles btnOk.Click
-        'Do stuff with selected options
-        Me.Close()
+
+        If My.Computer.Ports.SerialPortNames.Count > 0 Then
+            portparam.setPort(cbPort.SelectedItem)
+            'Console.WriteLine(portparam.getPort())
+            portparam.setBaud(CInt(cbBaud.SelectedItem))
+            'Console.WriteLine(portparam.getBaud())
+            portparam.setParity(cbPar.SelectedItem)
+            'Console.WriteLine(portparam.getParity())
+
+            portparam.setvalid(True)
+            Me.Close()
+        End If
+
     End Sub
+
 End Class

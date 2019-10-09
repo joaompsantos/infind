@@ -22,6 +22,7 @@ Partial Class Form1
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.lblTxdata = New System.Windows.Forms.Label()
         Me.lblRxdata = New System.Windows.Forms.Label()
         Me.lblHist = New System.Windows.Forms.Label()
@@ -32,6 +33,8 @@ Partial Class Form1
         Me.btnSair = New System.Windows.Forms.Button()
         Me.btnConf = New System.Windows.Forms.Button()
         Me.btnOpenport = New System.Windows.Forms.Button()
+        Me.serialport = New System.IO.Ports.SerialPort(Me.components)
+        Me.timer = New System.Windows.Forms.Timer(Me.components)
         Me.SuspendLayout()
         '
         'lblTxdata
@@ -151,4 +154,6 @@ Partial Class Form1
     Friend WithEvents btnSair As Button
     Friend WithEvents btnConf As Button
     Friend WithEvents btnOpenport As Button
+    Friend WithEvents serialport As IO.Ports.SerialPort
+    Friend WithEvents timer As Timer
 End Class
